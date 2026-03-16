@@ -35,11 +35,17 @@ export default function ResultClient() {
     const decoded = decodeReading(r);
     if (!decoded) return { cards: [], spread, question, deckId };
 
+    const spreadPositions = SPREAD_CONFIG[spread]?.positions ?? [];
     const cards: ResolvedCard[] = decoded
       .map((d) => {
         const card = getCardById(d.id);
         if (!card) return null;
-        return { card, reversed: d.rev, positionLabel: d.lbl, position: d.pos };
+        return {
+          card,
+          reversed: d.rev,
+          position: d.pos,
+          positionLabel: spreadPositions[d.pos] ?? `第${d.pos + 1}張`,
+        };
       })
       .filter(Boolean) as ResolvedCard[];
 

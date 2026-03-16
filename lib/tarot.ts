@@ -43,17 +43,18 @@ export function shuffleAndDraw(spread: SpreadType): DrawnCard[] {
 }
 
 export function encodeReading(drawn: DrawnCard[]): string {
-  return btoa(JSON.stringify(drawn.map(d => ({
+  // Use encodeURIComponent to safely handle CJK characters
+  const data = drawn.map(d => ({
     id: d.card.id,
     rev: d.reversed,
     pos: d.position,
-    lbl: d.positionLabel
-  }))));
+  }));
+  return encodeURIComponent(JSON.stringify(data));
 }
 
-export function decodeReading(encoded: string): { id: string; rev: boolean; pos: number; lbl: string }[] | null {
+export function decodeReading(encoded: string): { id: string; rev: boolean; pos: number }[] | null {
   try {
-    return JSON.parse(atob(encoded));
+    return JSON.parse(decodeURIComponent(encoded));
   } catch {
     return null;
   }
