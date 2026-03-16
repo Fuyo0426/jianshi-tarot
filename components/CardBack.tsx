@@ -1,7 +1,5 @@
 import Image from 'next/image';
 
-const APPA99_LOGO = 'https://appa99.com/store/images/appa99/s_siteinfo/7_1.jpg';
-
 interface CardBackProps {
   deckColor?: string;
   className?: string;
@@ -55,22 +53,12 @@ export default function CardBack({ deckColor = '#1A2744', className = '', small 
           boxShadow: '0 0 24px rgba(196,144,45,0.18), inset 0 1px 0 rgba(255,255,255,0.08)',
         }}
       >
-        {/* Show only left square portion of the wide logo image */}
         <Image
-          src={APPA99_LOGO}
+          src="/logo.jpg"
           alt="安平平安"
-          width={logoSize * 3}
-          height={logoSize}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: logoSize,
-            width: 'auto',
-            objectFit: 'cover',
-            objectPosition: 'left center',
-          }}
-          unoptimized
+          fill
+          className="object-cover"
+          sizes={`${logoSize}px`}
         />
       </div>
     </div>
