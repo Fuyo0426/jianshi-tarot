@@ -1,16 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || '';
 
-// Validate key format — Supabase service keys should be JWT format (starts with "eyJ")
-// If the provided key is not valid JWT format, create a mock client that returns empty data
-function isValidJwt(key: string): boolean {
-  return typeof key === 'string' && key.startsWith('eyJ');
-}
+// Supabase requires JWT format keys. If key is not JWT (doesn't start with "eyJ"),
+// substitute a mock key so the build succeeds. Runtime calls will fail gracefully.
+const effectiveKey = supabaseKey.startsWith('eyJ')
+  ? supabaseKey
+  : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoibW9jayJ9.mock';
 
-export const supabaseAdmin = isValidJwt(supabaseKey)
-  ? createClient(supabaseUrl, supabaseKey)
-  : createClient(supabaseUrl, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIn0.MOCK_KEY_PLACEHOLDER', {
-      auth: { persistSession: false }
-    });
+export const supabaseAdmin = createClient(supabaseUrl, effectiveKey, {
+  auth: { persistSession: false, autoRefreshToken: false },
+});
+
+export const isSupabaseConfigured = supabaseKey.startsWith('eyJ');
