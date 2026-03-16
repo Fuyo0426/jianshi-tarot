@@ -55,12 +55,21 @@ export default function CardBack({ deckColor = '#1A2744', className = '', small 
           boxShadow: '0 0 24px rgba(196,144,45,0.18), inset 0 1px 0 rgba(255,255,255,0.08)',
         }}
       >
+        {/* Show only left square portion of the wide logo image */}
         <Image
           src={APPA99_LOGO}
           alt="安平平安"
-          fill
-          className="object-cover"
-          sizes={`${logoSize}px`}
+          width={logoSize * 3}
+          height={logoSize}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: logoSize,
+            width: 'auto',
+            objectFit: 'cover',
+            objectPosition: 'left center',
+          }}
           unoptimized
         />
       </div>
