@@ -10,17 +10,18 @@ interface JianshiLogoProps {
 export default function JianshiLogo({ size = 48, className = '' }: JianshiLogoProps) {
   return (
     <div
-      className={`rounded-full overflow-hidden flex-shrink-0 ${className}`}
+      className={`flex-shrink-0 overflow-hidden ${className}`}
       style={{
         width: size,
         height: size,
-        border: '1px solid rgba(196,144,45,0.4)',
         position: 'relative',
+        borderRadius: '6px',
+        border: '1px solid rgba(196,144,45,0.45)',
       }}
     >
       <Image
         src={APPA99_LOGO}
-        alt="劍獅守護 Logo"
+        alt="安平平安 劍獅守護"
         fill
         className="object-cover"
         sizes={`${size}px`}

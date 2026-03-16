@@ -10,7 +10,7 @@ interface CardBackProps {
 
 export default function CardBack({ deckColor = '#1A2744', className = '', small = false }: CardBackProps) {
   const s = small ? 0.6 : 1;
-  const logoSize = small ? 40 : 68;
+  const logoSize = small ? 44 : 72;
 
   return (
     <div
@@ -44,19 +44,20 @@ export default function CardBack({ deckColor = '#1A2744', className = '', small 
         <path d="M12 0 L12 12 L0 12" stroke="rgba(196,144,45,0.5)" strokeWidth="1" fill="none" />
       </svg>
 
-      {/* Center logo — real appa99 劍獅 image */}
+      {/* Center logo — 安平平安 方塊 Logo */}
       <div
-        className="relative z-10 animate-float rounded-full overflow-hidden"
+        className="relative z-10 animate-float overflow-hidden"
         style={{
           width: logoSize,
           height: logoSize,
-          border: '1px solid rgba(196,144,45,0.4)',
-          boxShadow: '0 0 20px rgba(196,144,45,0.15)',
+          borderRadius: '8px',
+          border: '1px solid rgba(196,144,45,0.5)',
+          boxShadow: '0 0 24px rgba(196,144,45,0.18), inset 0 1px 0 rgba(255,255,255,0.08)',
         }}
       >
         <Image
           src={APPA99_LOGO}
-          alt="劍獅守護"
+          alt="安平平安"
           fill
           className="object-cover"
           sizes={`${logoSize}px`}
