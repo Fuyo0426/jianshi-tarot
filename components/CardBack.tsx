@@ -1,4 +1,6 @@
-import JianshiLogo from './JianshiLogo';
+import Image from 'next/image';
+
+const APPA99_LOGO = 'https://appa99.com/store/images/appa99/s_siteinfo/7_1.jpg';
 
 interface CardBackProps {
   deckColor?: string;
@@ -8,6 +10,8 @@ interface CardBackProps {
 
 export default function CardBack({ deckColor = '#1A2744', className = '', small = false }: CardBackProps) {
   const s = small ? 0.6 : 1;
+  const logoSize = small ? 40 : 68;
+
   return (
     <div
       className={`relative rounded-lg overflow-hidden flex items-center justify-center ${className}`}
@@ -40,8 +44,25 @@ export default function CardBack({ deckColor = '#1A2744', className = '', small 
         <path d="M12 0 L12 12 L0 12" stroke="rgba(196,144,45,0.5)" strokeWidth="1" fill="none" />
       </svg>
 
-      {/* Center logo */}
-      <JianshiLogo size={small ? 36 : 60} className="relative z-10 animate-float" />
+      {/* Center logo — real appa99 劍獅 image */}
+      <div
+        className="relative z-10 animate-float rounded-full overflow-hidden"
+        style={{
+          width: logoSize,
+          height: logoSize,
+          border: '1px solid rgba(196,144,45,0.4)',
+          boxShadow: '0 0 20px rgba(196,144,45,0.15)',
+        }}
+      >
+        <Image
+          src={APPA99_LOGO}
+          alt="劍獅守護"
+          fill
+          className="object-cover"
+          sizes={`${logoSize}px`}
+          unoptimized
+        />
+      </div>
     </div>
   );
 }
