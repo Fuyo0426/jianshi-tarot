@@ -158,7 +158,7 @@ export default function ResultClient() {
                 animate={{ y: 0, scale: 1 }}
                 exit={{ y: 40, scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 250, damping: 28 }}
-                className="relative w-full max-w-lg rounded-2xl overflow-hidden"
+                className="relative w-full max-w-xl rounded-2xl overflow-y-auto max-h-[90vh]"
                 style={{
                   background: 'linear-gradient(160deg, #14182A, #0E1120)',
                   border: '1px solid rgba(196,144,45,0.25)',
@@ -168,7 +168,7 @@ export default function ResultClient() {
               >
                 {/* Top accent line */}
                 <div
-                  className="h-px w-full"
+                  className="h-px w-full flex-shrink-0"
                   style={{ background: `linear-gradient(to right, transparent, ${activeCard.card.color}, transparent)` }}
                 />
 
@@ -210,7 +210,7 @@ export default function ResultClient() {
 
                       {/* Keywords */}
                       <div className="flex flex-wrap gap-1.5 mt-3">
-                        {activeCard.card.keywords.slice(0, 3).map((kw) => (
+                        {activeCard.card.keywords.map((kw) => (
                           <span
                             key={kw}
                             className="text-[10px] px-2 py-0.5 rounded-full font-sans"
@@ -227,52 +227,128 @@ export default function ResultClient() {
                     </div>
                   </div>
 
-                  {/* Meaning */}
-                  <div className="space-y-4">
+                  {/* Attribute badges: Element / Astrology / Yes-No */}
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {activeCard.card.element && (
+                      <span
+                        className="text-[10px] px-2.5 py-1 rounded-full font-mono flex items-center gap-1"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(196,144,45,0.15)', color: '#B8B0A0' }}
+                      >
+                        <span style={{ color: activeCard.card.color }}>◈</span> {activeCard.card.element}
+                      </span>
+                    )}
+                    {activeCard.card.astrology && (
+                      <span
+                        className="text-[10px] px-2.5 py-1 rounded-full font-mono flex items-center gap-1"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(196,144,45,0.15)', color: '#B8B0A0' }}
+                      >
+                        <span style={{ color: activeCard.card.color }}>★</span> {activeCard.card.astrology}
+                      </span>
+                    )}
+                    {activeCard.card.yes_no && (
+                      <span
+                        className="text-[10px] px-2.5 py-1 rounded-full font-mono"
+                        style={{
+                          background: activeCard.card.yes_no === 'yes'
+                            ? 'rgba(100,200,100,0.08)'
+                            : activeCard.card.yes_no === 'no'
+                            ? 'rgba(200,80,80,0.08)'
+                            : 'rgba(180,160,80,0.08)',
+                          border: `1px solid ${activeCard.card.yes_no === 'yes' ? 'rgba(100,200,100,0.25)' : activeCard.card.yes_no === 'no' ? 'rgba(200,80,80,0.25)' : 'rgba(180,160,80,0.25)'}`,
+                          color: activeCard.card.yes_no === 'yes' ? '#7EC87E' : activeCard.card.yes_no === 'no' ? '#C87E7E' : '#C8B87E',
+                        }}
+                      >
+                        {activeCard.card.yes_no === 'yes' ? '✓ 是' : activeCard.card.yes_no === 'no' ? '✗ 否' : '～ 中性'}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Main content */}
+                  <div className="space-y-5">
+                    {/* 整體解讀 */}
                     <div>
                       <p className="text-[10px] text-[#C4902D] tracking-widest uppercase font-mono mb-2">
                         {activeCard.reversed ? '逆位解讀' : '正位解讀'}
                       </p>
-                      <p className="text-sm text-[#EBE5D9] leading-relaxed font-serif">
+                      <p className="text-sm text-[#EBE5D9] leading-[1.9] font-serif">
                         {activeCard.reversed
                           ? activeCard.card.reversed.meaning
                           : activeCard.card.upright.meaning}
                       </p>
+                      {/* English general meaning if available */}
+                      {(activeCard.reversed ? activeCard.card.reversed_general : activeCard.card.upright_general) && (
+                        <p className="text-[11px] text-[#7A7260] leading-relaxed mt-2 italic">
+                          {(activeCard.reversed ? activeCard.card.reversed_general : activeCard.card.upright_general)?.slice(0, 220)}
+                          {((activeCard.reversed ? activeCard.card.reversed_general : activeCard.card.upright_general)?.length ?? 0) > 220 ? '…' : ''}
+                        </p>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      {[
-                        { label: '感情', key: 'love' as const },
-                        { label: '事業', key: 'career' as const },
-                      ].map((section) => (
-                        <div
-                          key={section.key}
-                          className="rounded-lg px-3 py-2.5"
-                          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(196,144,45,0.08)' }}
-                        >
-                          <p className="text-[9px] text-[#7A7260] tracking-widest uppercase mb-1.5 font-mono">
-                            {section.label}
-                          </p>
-                          <p className="text-[11px] text-[#B8B0A0] leading-relaxed">
-                            {activeCard.reversed
-                              ? activeCard.card.reversed[section.key]
-                              : activeCard.card.upright[section.key]}
-                          </p>
-                        </div>
-                      ))}
+                    {/* 三欄：感情 / 事業 / 財務 */}
+                    <div>
+                      <p className="text-[10px] text-[#C4902D] tracking-widest uppercase font-mono mb-2">
+                        各面向解讀
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        {[
+                          {
+                            label: '感情',
+                            icon: '♡',
+                            zh: activeCard.reversed ? activeCard.card.reversed.love : activeCard.card.upright.love,
+                            en: activeCard.reversed ? activeCard.card.reversed_love_en : activeCard.card.upright_love_en,
+                          },
+                          {
+                            label: '事業',
+                            icon: '⚡',
+                            zh: activeCard.reversed ? activeCard.card.reversed.career : activeCard.card.upright.career,
+                            en: activeCard.reversed ? activeCard.card.reversed_career_en : activeCard.card.upright_career_en,
+                          },
+                          {
+                            label: '財務',
+                            icon: '◎',
+                            zh: '',
+                            en: activeCard.reversed ? activeCard.card.reversed_finance_en : activeCard.card.upright_finance_en,
+                          },
+                        ].map((section) => (
+                          <div
+                            key={section.label}
+                            className="rounded-lg px-3 py-3"
+                            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(196,144,45,0.08)' }}
+                          >
+                            <div className="flex items-center gap-1.5 mb-2">
+                              <span style={{ color: activeCard.card.color }} className="text-xs">{section.icon}</span>
+                              <p className="text-[9px] text-[#7A7260] tracking-widest uppercase font-mono">
+                                {section.label}
+                              </p>
+                            </div>
+                            {section.zh && (
+                              <p className="text-[11px] text-[#C0B8A8] leading-relaxed mb-1.5 font-serif">
+                                {section.zh}
+                              </p>
+                            )}
+                            {section.en && (
+                              <p className="text-[10px] text-[#5A5448] leading-relaxed italic">
+                                {section.en.slice(0, 160)}{section.en.length > 160 ? '…' : ''}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
+                    {/* 指引 - 引言格式 */}
                     <div
-                      className="rounded-lg px-4 py-3"
+                      className="rounded-lg px-4 py-3 pl-5"
                       style={{
                         background: `${activeCard.card.color}08`,
                         border: `1px solid ${activeCard.card.color}18`,
+                        borderLeft: `3px solid ${activeCard.card.color}`,
                       }}
                     >
-                      <p className="text-[9px] tracking-widest uppercase mb-1.5 font-mono" style={{ color: activeCard.card.color }}>
+                      <p className="text-[9px] tracking-widest uppercase mb-2 font-mono" style={{ color: activeCard.card.color }}>
                         指引
                       </p>
-                      <p className="text-[11px] text-[#B8B0A0] leading-relaxed">
+                      <p className="text-[12px] text-[#C0B8A8] leading-[1.8] font-serif italic">
                         {activeCard.reversed
                           ? activeCard.card.reversed.advice
                           : activeCard.card.upright.advice}
