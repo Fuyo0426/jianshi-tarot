@@ -12,7 +12,7 @@ export default function CardBack({ className = '' }: CardBackProps) {
       className={`relative rounded-lg overflow-hidden ${className}`}
     >
       <Image
-        src="/card-back.jpg"
+        src="/card-back.png"
         alt="安平平安塔羅牌背面"
         fill
         className="object-cover"
