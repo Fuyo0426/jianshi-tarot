@@ -52,7 +52,7 @@ export default function FlippableCard({
       {/* Card flip container */}
       <div
         className="card-flip-container cursor-pointer"
-        style={{ width: 110, height: 176 }}
+        style={{ width: 220, height: 352 }}
         onClick={handleFlip}
       >
         <motion.div
